@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  es-singlenode:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.2.0
+    container_name: es-singlenode
+    environment:
+      - xpack.security.enabled=false
+      - node.name=single-node
+      - cluster.name=es-singlenode-c
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+    restart: always
+    networks:
+      - es-bridge
+  fastapi:
+    image: fastapi
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload
+    ports:
+      - 8080:8080
+    volumes:
+      - ./app:/code/app
+    restart: always 
+    networks:
+      - es-bridge
+
+networks:
+  es-bridge:
+    driver: bridge
