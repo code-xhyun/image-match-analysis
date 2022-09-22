@@ -34,7 +34,6 @@ def imageHash(url):
     return result
 
 def search_api(doc):
-    print(doc.get("a_hash"))
     body = {
         "query": {
             "bool": {
